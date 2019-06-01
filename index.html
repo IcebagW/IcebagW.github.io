@@ -355,8 +355,8 @@
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原来PWN题都是用ubuntu做的啊！入门以来的这个学期我都用的是kali真的是太捞了，期间出现了各种各样莫名其妙的问题，<br>这是我在XMAN4遇到libcsearcher时碰到搜索结果不匹配时发现的，尴尬的是组会时槐师傅（其实是所有师傅）都说用ubuntu，<br>原来他们以前有教过，谁叫我是半路出家，头铁的用了半年kali。</p>
 <h1 id="X64汇编"><a href="#X64汇编" class="headerlink" title="X64汇编"></a>X64汇编</h1><p>与X86最大的不同之处就是X64的地址，寄存器，数据，都变成了8个byte，更重要的是，为了防止对栈溢出的滥用，X64不再采用<br>X86的压栈式的传参方式，而是采用专用的寄存器保存函数的参数，它们是RDI，RSI，RDX，RCX，R8和 R9。只有参数数量大于6<br>个时才会使用栈保存后面的参数。</p>
 <h2 id="内存异常"><a href="#内存异常" class="headerlink" title="内存异常"></a>内存异常</h2><p>可以使用的内存地址不超过0x00007fffffffffff,否则会抛出异常（非法访问）。</p>
-<p>#漏洞<br>存在任意长read，会导致栈溢出。</p>
-<p>#劫持程序流<br>与X86类似，栈溢出覆盖返回地址，</p>
+<h1 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h1><p>存在任意长read，会导致栈溢出。</p>
+<h1 id="劫持程序流"><a href="#劫持程序流" class="headerlink" title="劫持程序流"></a>劫持程序流</h1><p>与X86类似，栈溢出覆盖返回地址，</p>
 <h1 id="garget"><a href="#garget" class="headerlink" title="garget"></a>garget</h1><p>为了达成某些目的，我们需要给调用的函数合适的参数，如’/bin/sh’,在X86中，直接将参数写在payload里面，伪造栈帧，因为<br>它通过压栈传参。而X64就要复杂一些，构造栈帧不再有效，需要将参数传入寄存器，而这就是我们寻找garget的原因。</p>
 <h2 id="garget是什么"><a href="#garget是什么" class="headerlink" title="garget是什么"></a>garget是什么</h2><p>garget就是程序中的一句汇编语句，可以连续执行，一条接着一条，形如：pop xxx;ret;达到给寄存器赋值的目的，还可以连续不断的<br>延伸下去。</p>
 <h1 id="寻找-garget"><a href="#寻找-garget" class="headerlink" title="寻找 garget"></a>寻找 garget</h1><p>对于这道题，由于采用了动态链接，程序本身并不大，所以找不到太多合适的garget，有一个操作就是在libc中寻找，libc多大啊，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;ROPgarget --binary libc.so.6 --only &quot;ret|pop&quot; | grep &quot;rdi&quot;</span><br></pre></td></tr></table></figure></p>
