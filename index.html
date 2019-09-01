@@ -269,6 +269,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/01/谈谈51/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ice_bag(WXJ)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/01/谈谈51/" itemprop="url">谈谈51</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-01T22:14:16+08:00">
+                2019-09-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h1><p>51单片机作为学习单片机的过程中必须要经过的一个过程来讲是非常重要的，原因在于51单片机从内部的硬件到软件有一套完整的按位操作系统。学习单片机是入门计算机科学的一个好方法。</p>
+<h1 id="何为单片机"><a href="#何为单片机" class="headerlink" title="何为单片机"></a>何为单片机</h1><p>你可以把单片机想象成一台电脑，一台压缩成卡片大小的电脑，CPU、RAM、ROM、I/O口和中断、系统定时器/计数器。拆开你的笔记本或台式电脑，你会发现它们的基本构造几乎是一样的。（这么多年过去了，上层的架构更新了一代又一代，冯诺依曼体系却从未动摇）</p>
+<h1 id="51单片机"><a href="#51单片机" class="headerlink" title="51单片机"></a>51单片机</h1><h2 id="“上古单片机”"><a href="#“上古单片机”" class="headerlink" title="“上古单片机”"></a>“上古单片机”</h2><p>51单片机是对所有兼容Intel 8031指令系统的单片机的统称。是上个世纪80年代的产品了，在功耗、主频、带宽、稳定性等方面都无法与现代单片机相提并论。不过，得益于功能简单、成本低廉，51单片机成了很好的教学单片机。</p>
+<h2 id="51单片机的组成"><a href="#51单片机的组成" class="headerlink" title="51单片机的组成"></a>51单片机的组成</h2><p><img src="/2019/09/01/谈谈51/p1.png" alt="最小系统电路"><br>如上图，不含外部设备，能让51单片机实现图灵完备的最基本电路，它包括：供电电源、时钟晶振、复位开关。尽管市面上有很多现成的开发板，还是建议自己焊一个，顺便提高焊接技术，今后的工作生活中用到烙铁的地方还多着。<br>众所周知，对计算机来说软件和硬件一样重要，制作好最小系统后，我们需要给我们的单片机注入灵魂。计算机被发明出来就是为了解决问题的，通过程序指令，操纵单片机为我们服务。我们自然不可以在单片机上编程编译环境在windows上。</p>
+<h2 id="编程方法"><a href="#编程方法" class="headerlink" title="编程方法"></a>编程方法</h2><p>51单片机支持C和汇编编程，C语言简化了编程的过程，reg51.h库函数让一个有 C语言基础的新手快速入门5单片机开发。而汇编语言更接近计算机的本质，编译器也只是把C代码转换为汇编代码的工具，这涉及到编译原理的知识吗，对计算机感兴趣的朋友可以逛逛<a href="https://icebagw.github.io/" target="_blank" rel="noopener">我的博客</a>，51入门以C为主，在这里就不详细探讨汇编了。</p>
+<h2 id="helloworld"><a href="#helloworld" class="headerlink" title="helloworld?"></a>helloworld?</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;reg51.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> uint unsigned int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    uint n=<span class="number">5000</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;	</span><br><span class="line">    	P1=<span class="number">0xfe</span>;</span><br><span class="line">    	<span class="keyword">while</span>(n--);</span><br><span class="line">		n=<span class="number">5000</span>;</span><br><span class="line">    	P1=<span class="number">0xff</span>;</span><br><span class="line">    	<span class="keyword">while</span>(n--);</span><br><span class="line">		n=<span class="number">5000</span>;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="程序分析"><a href="#程序分析" class="headerlink" title="程序分析"></a>程序分析</h2><p>一个非常简单的例程，单片机没有显示器，没办法printf在终端打印helloworld，我们只好用灯的亮灭来验证程序执行的结果。和X86下的C语言一样，main函数为程序开始执行的地方，P1变量定义于reg51.h中，对应的是串口寄存器P1的地址，P1=0xfe;这条语句将P1的值设为0xfe，在二进制下这就是11111110，最低位为0。P1=0xff;这条语句将P1的值设为0xff，在二进制下为11111111，最低位为1。<br>有一点你需要知道的是，单片机P1串口寄存器为一个Byte，也就是8个bit，在电气封装上表现为8个针脚，每一个bit和每一个针脚的高低电平正好对应。刚才的两条语句完成了P1最低位的0，1切换，控制P1.0的电位变换，在P1.0上连接一个发光二极管，就可以控制暗灭了！<br>注意，我们一般都要将单片机主循环写死，这是与windows下的C不同的，单片机没有操纵系统接管，我们得让程序一直跑下去。在本例程里，程序控制led灯亮暗交替，永不停息，直到没电。。。<br>单片机的速度很快时钟频率12Mhz，亮暗变化在 1 us间，但是在上面这个程序里我们加了while(n–);语句，相当于程序在这段时间里什么都没做，我们的眼睛就能观察到亮暗的变化了。</p>
+<h2 id="烧写程序"><a href="#烧写程序" class="headerlink" title="烧写程序"></a>烧写程序</h2><p>可以使用keil编译51单片机的C程序，输出十六进制文件，连接单片机与电脑，通过stc-isp烧写十六进制文件到单片机中。<br>这就是51单片机编程的全部过程，我在B站有更详细的视频教程，如果还有不明白的地方，在星火交流群里都可以讨论。</p>
+<h1 id="进阶与展望"><a href="#进阶与展望" class="headerlink" title="进阶与展望"></a>进阶与展望</h1><p>前提是你已经有了比较熟练的C语言基础：循环、判断、选择、指针、结构体、函数调用都能运用自如，会配置IO、定时器、中断、IIC等功能。如果学完这些你还对单片机/嵌入式开发感兴趣的话，可以试试更复杂的系统，MSP430、STM32、Raspberry Pi，开始完整的项目制作，做些小车、飞机、机器人之类的玩玩。<br>单片机/嵌入式系统是物联网场景的最优解，完美满足物联网低功耗、低成本、轻量化的需求，特别是现在有些单片机支持无线网络接入，大大提升了物联网的发展速度。nodemcu是一个支持高级语言Lua脚本的平台，配合node.js搭建服务器，使用起来非常简便。<br>本人水平有限，文章如有错误，还请师傅们指出。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/29/暑期re学习计划/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1529,147 +1657,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/01/gcc编译原理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ice_bag(WXJ)">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/01/gcc编译原理/" itemprop="url">gcc编译原理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-01T00:25:29+08:00">
-                2018-12-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计算机专精/" itemprop="url" rel="index">
-                    <span itemprop="name">计算机专精</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1720,7 +1707,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
