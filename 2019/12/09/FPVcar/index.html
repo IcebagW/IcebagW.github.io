@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="硬件,RaspberryPi,CV,图像,python,协议," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="项目概况使用的是上一个项目Ball Tracer的底盘，硬件方面基本没变。这次主要是想尝试一下用python实现socket通信。 Socket简介Socket又称”套接字”，应用程序通常通过”套接字”向网络发出请求或者应答网络请求，使主机间或者一台计算机上的进程间可以通讯。Socket是应用层与传输层间的一个抽象层，是个编程接口。 拓展阅读：计算机网络层级在协议组学到的一些东西。 架构网络电脑和">
+<meta name="keywords" content="硬件,RaspberryPi,CV,图像,python,协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPVcar">
+<meta property="og:url" content="http://yoursite.com/2019/12/09/FPVcar/index.html">
+<meta property="og:site_name" content="Ice_bag的技术博客，欢迎！">
+<meta property="og:description" content="项目概况使用的是上一个项目Ball Tracer的底盘，硬件方面基本没变。这次主要是想尝试一下用python实现socket通信。 Socket简介Socket又称”套接字”，应用程序通常通过”套接字”向网络发出请求或者应答网络请求，使主机间或者一台计算机上的进程间可以通讯。Socket是应用层与传输层间的一个抽象层，是个编程接口。 拓展阅读：计算机网络层级在协议组学到的一些东西。 架构网络电脑和">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-09T13:13:04.112Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FPVcar">
+<meta name="twitter:description" content="项目概况使用的是上一个项目Ball Tracer的底盘，硬件方面基本没变。这次主要是想尝试一下用python实现socket通信。 Socket简介Socket又称”套接字”，应用程序通常通过”套接字”向网络发出请求或者应答网络请求，使主机间或者一台计算机上的进程间可以通讯。Socket是应用层与传输层间的一个抽象层，是个编程接口。 拓展阅读：计算机网络层级在协议组学到的一些东西。 架构网络电脑和">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/09/FPVcar/"/>
+
+
+
+
+
+  <title>FPVcar | Ice_bag的技术博客，欢迎！</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ice_bag的技术博客，欢迎！</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">keen on hack and geek :~)</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/关于我" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/标签" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/文章分类" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/FPVcar/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ice_bag(WXJ)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">FPVcar</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T13:06:16+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="项目概况"><a href="#项目概况" class="headerlink" title="项目概况"></a>项目概况</h1><p>使用的是上一个项目Ball Tracer的底盘，硬件方面基本没变。这次主要是想尝试一下用python实现socket通信。</p>
+<h1 id="Socket简介"><a href="#Socket简介" class="headerlink" title="Socket简介"></a>Socket简介</h1><p>Socket又称”套接字”，应用程序通常通过”套接字”向网络发出请求或者应答网络请求，使主机间或者一台计算机上的进程间可以通讯。Socket是应用层与传输层间的一个抽象层，是个编程接口。</p>
+<h1 id="拓展阅读：计算机网络层级"><a href="#拓展阅读：计算机网络层级" class="headerlink" title="拓展阅读：计算机网络层级"></a>拓展阅读：计算机网络层级</h1><p>在协议组学到的一些东西。</p>
+<h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>电脑和树莓派连接同一个路由器，处于一个局域网内。使用ifconfig/ipconfig查看ip地址，便于后续连接的建立。</p>
+<h2 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h2><p>使用了两个socket,socket0负责传输图像，socket1负责传输操控指令。socket0从树莓派发往PC，socket1从PC发往树莓派。都是PC做服务器，树莓派做客户端。使用的是udp传输协议，延迟更低，丢包对视频传输的影响也不大。</p>
+<h2 id="操控"><a href="#操控" class="headerlink" title="操控"></a>操控</h2><p>使用键盘操控，w前进，s后退，a左转，d右转。</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><h2 id="PC端"><a href="#PC端" class="headerlink" title="PC端"></a>PC端</h2><h3 id="camera-py"><a href="#camera-py" class="headerlink" title="camera.py"></a>camera.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import numpy</span><br><span class="line">import socket</span><br><span class="line">import struct</span><br><span class="line">HOST=&apos;192.168.1.101&apos;</span><br><span class="line">PORT=9999</span><br><span class="line">buffSize=65535</span><br><span class="line"></span><br><span class="line">server=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)</span><br><span class="line">server.bind((HOST,PORT))</span><br><span class="line"></span><br><span class="line">print(&apos;now waiting for frames&apos;)</span><br><span class="line">while True:</span><br><span class="line">    data,address=server.recvfrom(buffSize)</span><br><span class="line">    if len(data)==1 and data[0]==1:</span><br><span class="line">        server.close()</span><br><span class="line">        cv2.destroyAllWindows()</span><br><span class="line">        exit()</span><br><span class="line">    try:</span><br><span class="line">        data=bytearray(data)</span><br><span class="line">        print(&apos;have recevied one frame&apos;,address)</span><br><span class="line">        data=numpy.array(data)</span><br><span class="line">        imgdecode=cv2.imdecode(data,1)</span><br><span class="line">        cv2.imshow(&apos;frames&apos;,imgdecode)</span><br><span class="line">        keycode=cv2.waitKey(10)&amp;0xff</span><br><span class="line">        if keycode==ord(&apos;q&apos;):</span><br><span class="line">            break</span><br><span class="line">    except:</span><br><span class="line">        continue</span><br><span class="line">server.close()</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h3 id="control-py"><a href="#control-py" class="headerlink" title="control.py"></a>control.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import socket</span><br><span class="line">HOST=&apos;192.168.1.101&apos;</span><br><span class="line">PORT=8888</span><br><span class="line">buffSize=65535</span><br><span class="line"></span><br><span class="line">server=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)</span><br><span class="line">server.bind((HOST,PORT))</span><br><span class="line"></span><br><span class="line">print(&apos;now waiting for connection&apos;)</span><br><span class="line"></span><br><span class="line">background=cv2.imread(&apos;background.jpg&apos;)</span><br><span class="line"></span><br><span class="line">while True:</span><br><span class="line">    data,address=server.recvfrom(buffSize)</span><br><span class="line">    if len(data)==1 and data[0]==1:</span><br><span class="line">        server.close()</span><br><span class="line">        exit()</span><br><span class="line">    if data==b&apos;hello&apos;:</span><br><span class="line">        print(&apos;start&apos;,address)</span><br><span class="line">        </span><br><span class="line">        while True:</span><br><span class="line">            cv2.imshow(&apos;background&apos;,background)</span><br><span class="line">            c=cv2.waitKey(100)&amp;0xff</span><br><span class="line">            if c==ord(&apos;q&apos;):</span><br><span class="line">                server.close()</span><br><span class="line">                exit()</span><br><span class="line">            c=chr(c)</span><br><span class="line">            server.sendto(c.encode(&apos;utf-8&apos;),address)</span><br><span class="line">    try:</span><br><span class="line">        </span><br><span class="line">        print(&apos;have recevied one msg:&apos;,data,address)</span><br><span class="line">        </span><br><span class="line">    except:</span><br><span class="line">        continue</span><br><span class="line">server.close()</span><br><span class="line">exit()</span><br></pre></td></tr></table></figure>
+<h2 id="树莓派"><a href="#树莓派" class="headerlink" title="树莓派"></a>树莓派</h2><h3 id="camera-py-1"><a href="#camera-py-1" class="headerlink" title="camera.py"></a>camera.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">buffSize=65535</span><br><span class="line">server=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">cap = cv2.VideoCapture(0)</span><br><span class="line">while True:</span><br><span class="line">	ret, frame= cap.read()</span><br><span class="line">	frame=cv2.flip(frame,-1,dst=None)</span><br><span class="line">	if ret is False:</span><br><span class="line">		print &apos;f&apos;</span><br><span class="line">		continue</span><br><span class="line">	cv2.imshow(&apos;the frame&apos;,frame)</span><br><span class="line">	keycode=cv2.waitKey(10)&amp;0xff</span><br><span class="line">	if keycode==ord(&apos;q&apos;):</span><br><span class="line">		break</span><br><span class="line">	</span><br><span class="line">	ret,imgencode=cv2.imencode(&apos;.jpg&apos;,frame,[cv2.IMWRITE_JPEG_QUALITY,50])</span><br><span class="line">	server.sendto(imgencode,(HOST,PORT))</span><br></pre></td></tr></table></figure>
+<h3 id="control-py-1"><a href="#control-py-1" class="headerlink" title="control.py"></a>control.py</h3><p>import socket<br>import time<br>import RPi.GPIO as GPIO<br>import gpiotest as gp</p>
+<p>GPIO.setmode(GPIO.BOARD)<br>INT1=11<br>INT2=12<br>INT3=13<br>INT4=15</p>
+<p>GPIO.setup(INT1,GPIO.OUT)<br>GPIO.setup(INT2,GPIO.OUT)<br>GPIO.setup(INT3,GPIO.OUT)<br>GPIO.setup(INT4,GPIO.OUT)</p>
+<p>HOST=’192.168.1.101’<br>PORT=8888<br>buffSize=65535<br>server=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)</p>
+<p>server.sendto(‘hello’,(HOST,PORT))<br>while True:<br>    c,addr=server.recvfrom(buffSize)<br>    c=c.decode(‘utf-8’)<br>    c=c.encode(‘ascii’,’ignore’)<br>    print(c,type(c))</p>
+<pre><code>if c==&apos;w&apos;:
+    gp.f(0.05)
+    print(&apos;w&apos;*100)
+elif c==u&apos;s&apos;:
+    gp.b(0.05)
+elif c==u&apos;a&apos;:
+    gp.t_l(0.05)
+elif c==u&apos;d&apos;:
+    gp.t_r(0.05)
+elif c==u&apos;q&apos;:
+    server.close()
+    exit() 
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">### gpiotest.py</span><br></pre></td></tr></table></figure>
+<p>import cv2<br>import RPi.GPIO as GPIO<br>import time<br>import random</p>
+<p>GPIO.setmode(GPIO.BOARD)</p>
+<p>INT1=11<br>INT2=12<br>INT3=13<br>INT4=15</p>
+<p>GPIO.setup(INT1,GPIO.OUT)<br>GPIO.setup(INT2,GPIO.OUT)<br>GPIO.setup(INT3,GPIO.OUT)<br>GPIO.setup(INT4,GPIO.OUT)</p>
+<p>def b(time_):<br>    GPIO.output(INT2,GPIO.HIGH)<br>    GPIO.output(INT1,GPIO.LOW)<br>    GPIO.output(INT3,GPIO.HIGH)<br>    GPIO.output(INT4,GPIO.LOW)<br>    time.sleep(time_)<br>    GPIO.output(INT1,GPIO.LOW)<br>    GPIO.output(INT2,GPIO.LOW)<br>    GPIO.output(INT3,GPIO.LOW)<br>    GPIO.output(INT4,GPIO.LOW)</p>
+<p>def f(time_):<br>    GPIO.output(INT2,GPIO.LOW)<br>    GPIO.output(INT1,GPIO.HIGH)<br>    GPIO.output(INT3,GPIO.LOW)<br>    GPIO.output(INT4,GPIO.HIGH)<br>    time.sleep(time_)<br>    GPIO.output(INT1,GPIO.LOW)<br>    GPIO.output(INT2,GPIO.LOW)<br>    GPIO.output(INT3,GPIO.LOW)<br>    GPIO.output(INT4,GPIO.LOW)</p>
+<p>def t_l(time_):<br>    GPIO.output(INT2,GPIO.HIGH)<br>    GPIO.output(INT1,GPIO.LOW)<br>    GPIO.output(INT3,GPIO.LOW)<br>    GPIO.output(INT4,GPIO.HIGH)<br>    time.sleep(time_)<br>    GPIO.output(INT1,GPIO.LOW)<br>    GPIO.output(INT2,GPIO.LOW)<br>    GPIO.output(INT3,GPIO.LOW)<br>    GPIO.output(INT4,GPIO.LOW)</p>
+<p>def t_r(time_):<br>    GPIO.output(INT2,GPIO.LOW)<br>    GPIO.output(INT1,GPIO.HIGH)<br>    GPIO.output(INT3,GPIO.HIGH)<br>    GPIO.output(INT4,GPIO.LOW)<br>    time.sleep(time_)<br>    GPIO.output(INT1,GPIO.LOW)<br>    GPIO.output(INT2,GPIO.LOW)<br>    GPIO.output(INT3,GPIO.LOW)<br>    GPIO.output(INT4,GPIO.LOW)</p>
+<p><code>`</code></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/硬件/" rel="tag"># 硬件</a>
+          
+            <a href="/tags/RaspberryPi/" rel="tag"># RaspberryPi</a>
+          
+            <a href="/tags/CV/" rel="tag"># CV</a>
+          
+            <a href="/tags/图像/" rel="tag"># 图像</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/协议/" rel="tag"># 协议</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/04/pywifi/" rel="next" title="pywifi">
+                <i class="fa fa-chevron-left"></i> pywifi
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/09/OSI/" rel="prev" title="OSI">
+                OSI <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Ice_bag(WXJ)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/文章分类/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/标签/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#项目概况"><span class="nav-number">1.</span> <span class="nav-text">项目概况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Socket简介"><span class="nav-number">2.</span> <span class="nav-text">Socket简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展阅读：计算机网络层级"><span class="nav-number">3.</span> <span class="nav-text">拓展阅读：计算机网络层级</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构"><span class="nav-number">4.</span> <span class="nav-text">架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络"><span class="nav-number">4.1.</span> <span class="nav-text">网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket"><span class="nav-number">4.2.</span> <span class="nav-text">socket</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操控"><span class="nav-number">4.3.</span> <span class="nav-text">操控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">5.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PC端"><span class="nav-number">5.1.</span> <span class="nav-text">PC端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#camera-py"><span class="nav-number">5.1.1.</span> <span class="nav-text">camera.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#control-py"><span class="nav-number">5.1.2.</span> <span class="nav-text">control.py</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树莓派"><span class="nav-number">5.2.</span> <span class="nav-text">树莓派</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#camera-py-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">camera.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#control-py-1"><span class="nav-number">5.2.2.</span> <span class="nav-text">control.py</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ice_bag(WXJ)</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

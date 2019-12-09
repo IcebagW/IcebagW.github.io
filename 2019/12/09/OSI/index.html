@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="协议," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="计算机网络层级以前在协议组学到的一些东西，互联网的本质就是一系列的网络协议，这个协议就叫OSI协议（一系列协议），按照功能不同，分工不同，人为的分层七层。实际上这个七层是不存在的。没有这七层的概念，只是人为的划分而已。区分出来的目的只是让你明白哪一层是干什么用的。七层划分为从高到低：应用层、表示层、会话层、传输层、网络层、数据链路层、物理层。 物理层物理层就是唯一看得见摸得着的一层，也是最底层。它">
+<meta name="keywords" content="协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSI">
+<meta property="og:url" content="http://yoursite.com/2019/12/09/OSI/index.html">
+<meta property="og:site_name" content="Ice_bag的技术博客，欢迎！">
+<meta property="og:description" content="计算机网络层级以前在协议组学到的一些东西，互联网的本质就是一系列的网络协议，这个协议就叫OSI协议（一系列协议），按照功能不同，分工不同，人为的分层七层。实际上这个七层是不存在的。没有这七层的概念，只是人为的划分而已。区分出来的目的只是让你明白哪一层是干什么用的。七层划分为从高到低：应用层、表示层、会话层、传输层、网络层、数据链路层、物理层。 物理层物理层就是唯一看得见摸得着的一层，也是最底层。它">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-09T12:58:22.946Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OSI">
+<meta name="twitter:description" content="计算机网络层级以前在协议组学到的一些东西，互联网的本质就是一系列的网络协议，这个协议就叫OSI协议（一系列协议），按照功能不同，分工不同，人为的分层七层。实际上这个七层是不存在的。没有这七层的概念，只是人为的划分而已。区分出来的目的只是让你明白哪一层是干什么用的。七层划分为从高到低：应用层、表示层、会话层、传输层、网络层、数据链路层、物理层。 物理层物理层就是唯一看得见摸得着的一层，也是最底层。它">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/09/OSI/"/>
+
+
+
+
+
+  <title>OSI | Ice_bag的技术博客，欢迎！</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ice_bag的技术博客，欢迎！</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">keen on hack and geek :~)</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/关于我" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/标签" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/文章分类" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/OSI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ice_bag(WXJ)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OSI</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T14:09:38+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="计算机网络层级"><a href="#计算机网络层级" class="headerlink" title="计算机网络层级"></a>计算机网络层级</h1><p>以前在协议组学到的一些东西，互联网的本质就是一系列的网络协议，这个协议就叫OSI协议（一系列协议），按照功能不同，分工不同，人为的分层七层。实际上这个七层是不存在的。没有这七层的概念，只是人为的划分而已。区分出来的目的只是让你明白哪一层是干什么用的。<br>七层划分为从高到低：应用层、表示层、会话层、传输层、网络层、数据链路层、物理层。</p>
+<h2 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h2><p>物理层就是唯一看得见摸得着的一层，也是最底层。它指的是计算机与计算机之间的物理连接，可以是光纤，双绞线，电话线，电磁波信号。是计算机网络组成必不可少的一层。</p>
+<h2 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h2><p>物理层传输的只是010二进制信号，如果没有编解码，将不会有任何意义。链路层的意义就是对二进制信号进行编码与解码。</p>
+<h3 id="局域网"><a href="#局域网" class="headerlink" title="局域网"></a>局域网</h3><p>局域网是一种私有网络，一般在一座建筑物内或建筑物附近，比如家庭、办公室或工厂。局域网络被广泛用来连接个人计算机和消费类电子设备，使它们能够共享资源和交换信息。当局域网被用于公司时，它们就称为企业网络，互联网就是由一个个局域网组成。</p>
+<h3 id="一个经典例子-ethernet"><a href="#一个经典例子-ethernet" class="headerlink" title="一个经典例子:ethernet"></a>一个经典例子:ethernet</h3><p>对物理层的二进制信号分组，每一组称为一个数据包，ethernet协议规定了ethernet数据包的结构。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">head</th>
+<th style="text-align:center">data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">18byte</td>
+<td style="text-align:center">46~1500byte</td>
+</tr>
+</tbody>
+</table>
+<h4 id="head"><a href="#head" class="headerlink" title="head"></a>head</h4><blockquote>
+<p>1.源地址(6 byte)<br>2.目标地址(6 byte)<br>3.数据类型(6 byte)</p>
+</blockquote>
+<p>此处的地址指的就是mac地址，Ethernet规定接入Internet的设备都必须具备网卡，发送端的和接收端的地址便是指网卡的地址，即Mac地址。每块网的Mac地址都应该是唯一的。</p>
+<h3 id="ethernet广播"><a href="#ethernet广播" class="headerlink" title="ethernet广播"></a>ethernet广播</h3><p>数据在局域网中以Ethernet协议传输时，采用的是广播的方式，所有的数据包都是可以被接收到的，但是一般只接收目标地址与本机Mac地址相符的包，因为正常情况下数据是被加密的，即使接受到了发给别人的数据包，也没有用。所以数据的加密是很重要的。</p>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><p>那么问题来了，1.广播中怎么知道目标的Mac地址？2.怎么与不在同一个局域网的主机通信？</p>
+<h3 id="IP编址"><a href="#IP编址" class="headerlink" title="IP编址"></a>IP编址</h3><p>除了Mac地址，还有一个比较常提及的地址IP地址。IP地址用于标识主机所处的局域网。IP地址是由网络地址与主机地址两部分所组成。</p>
+<h4 id="网络地址"><a href="#网络地址" class="headerlink" title="网络地址"></a>网络地址</h4><p>网络地址可用来识别设备所在的网络，网络地址位于IP地址的前段。当组织或企业申请IP地址时，所获得的并非IP地址，而是取得一个唯一的、能够识别的网络地址。同一网络上的所有设备，都有相同的网络地址。IP路由的功能是根据IP地址中的网络地址，决定要将IP信息包送至所指明的那个网络。</p>
+<h4 id="主机地址"><a href="#主机地址" class="headerlink" title="主机地址"></a>主机地址</h4><p>主机地址位于IP地址的后段，可用来识别网络上设备。同一网络上的设备都会有相同的网络地址，而各设备之间则是以主机地址来区别。</p>
+<h3 id="IP路由"><a href="#IP路由" class="headerlink" title="IP路由"></a>IP路由</h3><p>IP主要包含三方面内容：IP编址方案、分组封装格式及分组转发规则</p>
+<p>互联网是由许多个局域网连接所形成的大型网络。如果要在互联网中传送IP信息包，除了确保网络上每个设备都有一个唯一的IP地址之外，网络之间还必须有传送的机制，才能将IP信息包通过一个个的网络传送到目的地。此种传送机制称为IP路由。<br>网关：局域网的出入口，连通不同的局域网。在IP路由的过程中，由网关负责选择路径，IP信息包则是被传送的对象。<br>IP信息包传送时还有一项很重要的特性，即使用非连接式的传送方式。非连接式的传送方式是指IP信息包传送时，源设备与目的设备双方不必事先连接，即可将IP信息包送达。即源设备完全不用理会目的设备，而只是单纯地将IP信息包逐一送出。至于目的设备是否收到每个信息包、是否收到正确的信息包等，则由上层的协议(例如TCP)来负责检查。<br>使用非连接式的优点是过程简单化，可提高传输的效率。此外，由于IP信息包必须通过IP路由的机制，在一个个路由器之间传递，非连接式的传送方式较易在此种机制中运行。<br>不同局域网间的数据传输：通过网络地址区分，计算机运算判断出目标不在同一个局域网内，</p>
+<h3 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h3><p>主机A的IP地址为192.168.1.1，MAC地址为0A-11-22-33-44-01；<br>主机B的IP地址为192.168.1.2，MAC地址为0A-11-22-33-44-02；<br>当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址（192.168.1.2）解析成主机B的MAC地址，以下为工作流程：<br>第1步：根据主机A上的路由表内容，IP确定用于访问主机B的转发IP地址是192.168.1.2。然后A主机在自己的本地ARP缓存中检查主机B的匹配MAC地址。<br>第2步：如果主机A在ARP缓存中没有找到映射，它将询问192.168.1.2的硬件地址，从而将ARP请求帧广播到本地网络上的所有主机。源主机A的IP地址和MAC地址都包括在ARP请求中。本地网络上的每台主机都接收到ARP请求并且检查是否与自己的IP地址匹配。如果主机发现请求的IP地址与自己的IP地址不匹配，它将丢弃ARP请求。<br>第3步：主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。<br>第4步：主机B将包含其MAC地址的ARP回复消息直接发送回主机A。<br>第5步：当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。</p>
+<h3 id="IP发包"><a href="#IP发包" class="headerlink" title="IP发包"></a>IP发包</h3><p>计算机网络模型就像套娃，底层套上层，一层又一层。位于网络层的IP数据包被套在了数据链路层ethernet的数据里。它大概长这样。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">ethernet head</th>
+<th style="text-align:center">ip head</th>
+<th style="text-align:center">ip data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p>如果源主机和目标主机在同一局域网内，包长这样</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">源Mac</th>
+<th style="text-align:center">目标Mac</th>
+<th style="text-align:center">源IP</th>
+<th style="text-align:center">目标IP</th>
+<th style="text-align:center">data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p>目标Mac地址可通过ARP查询得到。ARP包长这样</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">源Mac</th>
+<th style="text-align:center">FF:FF:FF:FF:FF:FF</th>
+<th style="text-align:center">源IP</th>
+<th style="text-align:center">目标IP</th>
+<th style="text-align:center">data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p>返回目标MAC地址。<br>如果源主机和目标主机不在同一局域网，包长这样</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">源Mac</th>
+<th style="text-align:center">网关Mac</th>
+<th style="text-align:center">源IP</th>
+<th style="text-align:center">目标IP</th>
+<th style="text-align:center">data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p>网关mac也通过ARP查询得到。这时候ARP包长这样</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">源Mac</th>
+<th style="text-align:center">FF:FF:FF:FF:FF:FF</th>
+<th style="text-align:center">源IP</th>
+<th style="text-align:center">网关IP</th>
+<th style="text-align:center">data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p>返回网关MAC地址。</p>
+<h2 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h2><h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><p>我们在传输数据时，可以只使用(传输层)TCP/IP协议，但是那样的话，如果没有应用层，便无法识别数据内容。<br>如果想要使传输的数据有意义，则必须使用到应用层协议。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/协议/" rel="tag"># 协议</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/09/FPVcar/" rel="next" title="FPVcar">
+                <i class="fa fa-chevron-left"></i> FPVcar
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Ice_bag(WXJ)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/文章分类/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/标签/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络层级"><span class="nav-number">1.</span> <span class="nav-text">计算机网络层级</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理层"><span class="nav-number">1.1.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链路层"><span class="nav-number">1.2.</span> <span class="nav-text">链路层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局域网"><span class="nav-number">1.2.1.</span> <span class="nav-text">局域网</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个经典例子-ethernet"><span class="nav-number">1.2.2.</span> <span class="nav-text">一个经典例子:ethernet</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#head"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">head</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ethernet广播"><span class="nav-number">1.2.3.</span> <span class="nav-text">ethernet广播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络层"><span class="nav-number">1.3.</span> <span class="nav-text">网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IP编址"><span class="nav-number">1.3.1.</span> <span class="nav-text">IP编址</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网络地址"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">网络地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主机地址"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">主机地址</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP路由"><span class="nav-number">1.3.2.</span> <span class="nav-text">IP路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP"><span class="nav-number">1.3.3.</span> <span class="nav-text">ARP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP发包"><span class="nav-number">1.3.4.</span> <span class="nav-text">IP发包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传输层"><span class="nav-number">1.4.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用层"><span class="nav-number">1.5.</span> <span class="nav-text">应用层</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ice_bag(WXJ)</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

